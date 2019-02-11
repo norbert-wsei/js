@@ -1,0 +1,16 @@
+body {
+  background: #131313;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.main {
+  width: 680px;
+}
+
+.note-list {
+  width: 40%;
+}
+
+.note-editor {
+  width: 60%;
+}
