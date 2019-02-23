@@ -3,11 +3,23 @@ const noNotes = document.querySelector('#no-notes');
 const noteTitle = document.querySelector('#note-title');
 const noteContent = document.querySelector('#note-content');
 const noteAdd = document.querySelector('#note-add');
+const noteColors = document.querySelector('#note-colors');
+const noteColor = document.querySelector('#note-color');
 
 const NOTES_STORE = 'notesStore';
 
+const COLORS = [
+  '#FFA500',
+  '#FFEB3B',
+  '#F44336'
+];
+
 noteAdd.addEventListener('click', () => {
-  const note = new Note({title: 'dupa'});
+  const note = new Note({ 
+    title: noteTitle.value,
+    content: noteContent.value,
+    color: noteColor.value
+  });
 
   Notes.saveNote(note);
 });
@@ -45,8 +57,24 @@ function renderNotes() {
   noteList.innerHTML = '';
   notes.forEach(note => {
     const li = document.createElement('li');
+    const title = document.createElement('span');
+    const content = document.createElement('span');
+    const pinned = document.createElement('span');
+    const remove = document.createElement('span');
 
-    li.innerText = note.title;
+    title.classList.add('note-title');
+    content.classList.add('note-content');
+    pinned.classList.add('note-pinned');
+    remove.classList.add('note-remove');
+
+    title.innerText = note.title;
+    content.innerText = note.content || null;
+
+    li.style.borderLeft = `2px solid ${note.color}`;
+
+    li.appendChild(title);
+    li.appendChild(content);
+
     li.addEventListener('click', () => {
       console.log('note clicked!');
     });
@@ -57,4 +85,20 @@ function renderNotes() {
   noNotes.style.display = 'none';
 }
 
+function renderColors() {
+  COLORS.forEach(color => {
+    const colorButton = document.createElement('span');
+
+    colorButton.classList.add('note-color-button');
+    colorButton.style.background = color;
+
+    colorButton.addEventListener('click', () => {
+      noteColor.value = color;
+    });
+
+    noteColors.appendChild(colorButton);
+  });
+}
+
 renderNotes();
+renderColors();

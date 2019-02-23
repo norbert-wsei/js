@@ -1,16 +1,90 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
-  background: #131313;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  background: #fafafa;
+  font-family: Arial, sans-serif;
+  margin: 0;
 }
 
 .main {
-  width: 680px;
-}
-
-.note-list {
-  width: 40%;
+  display: flex;
+  width: 880px;
+  margin: 0 auto;
 }
 
 .note-editor {
   width: 60%;
+}
+
+.note-editor input {
+  width: 100%;
+  border: 0;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  padding: 10px 20px;
+}
+
+.note-editor .note-color-button {
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  margin: 0 5px;
+}
+
+.note-editor .note-colors {
+  margin-bottom: 10px;
+}
+
+.note-editor .note-color {
+  display: none;
+}
+
+.note-editor textarea {
+  min-width: 100%;
+  max-width: 100%;
+  height: 300px;
+}
+
+.note-list-box {
+  background-color: #fff;
+  width: 40%;
+  border: 1px solid #e6e6e6;
+  margin-left: 10px;
+}
+
+.note-list-box ul {
+  margin: 0;
+  padding: 0;
+}
+
+.note-list-box li {
+  list-style: none;
+  margin: 2px 0;
+}
+
+.note-list-box li:hover {
+  background-color: #ccc;
+  cursor: pointer;
+}
+
+.note-list-box .note-title,
+.note-list-box .note-content {
+  display: block;
+}
+
+.note-list-box .note-title {
+  color: #262626;
+  font-weight: 600;
+}
+
+.note-list-box .note-content {
+  font-size: 12px;
+  color: #999;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
