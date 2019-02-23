@@ -55,7 +55,7 @@ function poruszMarkerem(ev) {
   ws.send(JSON.stringify(wsData));
 }
 function startWebSocket() {
-  let url = 'ws://91.121.66.175:8010'
+  let url = 'ws://77.55.222.58:443';
   ws = new WebSocket(url);
   ws.addEventListener('open', onWSOpen);
   ws.addEventListener('message', onWSMessage);
@@ -84,17 +84,17 @@ function onWSMessage(e) {
 
 
 function getLocalization() {
-  navigator.geolocation.getCurrentPosition(geoOk, geoFail)
-
+  navigator.geolocation.getCurrentPosition(geoOk, geoFail);
 }
 
 function geoOk(data) {
   let coords = {
     lat: data.coords.latitude,
     lng: data.coords.longitude
-  }
-  map.setCenter(coords)
-  marker.setPosition(coords)
+  };
+
+  map.setCenter(coords);
+  marker.setPosition(coords);
 }
 
 function geoFail(err) {
