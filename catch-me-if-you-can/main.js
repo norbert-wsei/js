@@ -16,6 +16,7 @@ function initMap() {
     map: map,
     animation: google.maps.Animation.DROP
   });
+
   getLocalization();
   startWebSocket();
   addKeyboardEvents();
@@ -81,8 +82,6 @@ function onWSMessage(e) {
   }
 }
 
-
-
 function getLocalization() {
   navigator.geolocation.getCurrentPosition(geoOk, geoFail);
 }
@@ -95,8 +94,24 @@ function geoOk(data) {
 
   map.setCenter(coords);
   marker.setPosition(coords);
+
+  placeMyMarker(coords, 'move')
 }
 
 function geoFail(err) {
   console.log(err)
+}
+
+function placeMyMarker(coords, action) {
+  marker.setPosition(coords);
+  map.setCenter(coords);
+
+  let me = {
+    id: guid,
+    action: _action,
+    coords: _coords,
+    playericon: icon
+  };
+
+  ws.send(JSON.stringify(me))
 }
