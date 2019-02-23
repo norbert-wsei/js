@@ -22,6 +22,14 @@ noteAdd.addEventListener('click', () => {
   });
 
   Notes.saveNote(note);
+
+  noteTitle.value = null;
+  noteContent.value = null;
+  noteColor.value = null;
+
+  [...noteColors.children].forEach((noteColor) => {
+    noteColor.classList.remove('color');
+  });
 });
 
 class Note {
@@ -73,6 +81,7 @@ function renderNotes() {
     li.style.borderLeft = `2px solid ${note.color}`;
 
     li.appendChild(title);
+    li.appendChild(remove);
     li.appendChild(content);
 
     li.addEventListener('click', () => {
@@ -92,8 +101,14 @@ function renderColors() {
     colorButton.classList.add('note-color-button');
     colorButton.style.background = color;
 
-    colorButton.addEventListener('click', () => {
+    colorButton.addEventListener('click', (event) => {
       noteColor.value = color;
+
+      [...noteColors.children].forEach((noteColor) => {
+        noteColor.classList.remove('color');
+      });
+
+      event.target.classList.add('color');
     });
 
     noteColors.appendChild(colorButton);

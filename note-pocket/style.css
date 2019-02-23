@@ -35,6 +35,10 @@ body {
   margin: 0 5px;
 }
 
+.note-editor .color {
+  border: 2px solid black;
+}
+
 .note-editor .note-colors {
   margin-bottom: 10px;
 }
