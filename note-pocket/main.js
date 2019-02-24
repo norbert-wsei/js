@@ -36,7 +36,6 @@ noteAdd.addEventListener('click', () => {
     color: noteColor.value
   });
 
-
   Notes.saveNote(note);
 
   noteTitle.value = null;
@@ -96,6 +95,24 @@ class Notes {
     localStorage.setItem(NOTES_STORE, JSON.stringify(notes));
     renderNotes();
   }
+
+  static removeNote(index) {
+    const notes = Notes.getNotes();
+
+    notes.splice(index, 1);
+
+    localStorage.setItem(NOTES_STORE, JSON.stringify(notes));
+    renderNotes();
+  }
+
+  static setPinnedNote(index) {
+    const notes = Notes.getNotes();
+
+    notes[index].pinned = true;
+
+    localStorage.setItem(NOTES_STORE, JSON.stringify(notes));
+    renderNotes();
+  }
 }
 
 
@@ -105,20 +122,37 @@ function renderNotes() {
   if (notes.length === 0) {
     return noNotes.style.display = 'block';
   }
+
   noteList.innerHTML = '';
   notes
     .sort(note => note.pinned ? -1 : 1)
     .forEach((note, index) => {
+      const leftBox = document.createElement('div');
+      const rightBox = document.createElement('div');
+
       const li = document.createElement('li');
       const title = document.createElement('span');
       const content = document.createElement('span');
       const pinned = document.createElement('span');
       const remove = document.createElement('span');
 
+      leftBox.classList.add('note-left-box');
+      rightBox.classList.add('note-right-box');
+
       title.classList.add('note-title');
       content.classList.add('note-content');
       pinned.classList.add('note-pinned');
       remove.classList.add('note-remove');
+
+      remove.addEventListener('click', (event) => {
+        event.stopPropagation();
+        Notes.removeNote(index);
+      });
+
+      pinned.addEventListener('click', (event) => {
+        event.stopPropagation();
+        Notes.setPinnedNote(index);
+      });
 
       title.innerText = note.title;
       content.innerText = note.content || null;
@@ -127,9 +161,18 @@ function renderNotes() {
 
       li.dataset.index = index;
 
-      li.appendChild(title);
-      li.appendChild(remove);
-      li.appendChild(content);
+      if (note.pinned) {
+        pinned.classList.add('note-pinned-active');
+      }
+
+      leftBox.appendChild(title);
+      leftBox.appendChild(content);
+      
+      rightBox.appendChild(pinned);
+      rightBox.appendChild(remove);
+
+      li.appendChild(leftBox);
+      li.appendChild(rightBox);
 
       li.addEventListener('click', editNote);
 
