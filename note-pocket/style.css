@@ -175,3 +175,7 @@ body {
   color: #ffeb3b;
   content: "\2605";
 }
+
+.no-notes {
+  text-align: center;
+}

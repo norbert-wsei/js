@@ -20,6 +20,7 @@ const COLORS = [
 
 let isEditing = false;
 let currentEditNoteIndex = -1;
+let currentNoteIsPinned = false;
 
 noteAdd.addEventListener('click', () => {
   if (noteTitle.value === '' || noteContent === '') {
@@ -65,16 +66,22 @@ class Note {
 }
 
 class Notes {
-  static saveNote(newNote) {
-    const notes = Notes.getNotes();
-    notes.push(newNote);
-
+  static saveNotes(notes) {
     localStorage.setItem(NOTES_STORE, JSON.stringify(notes));
     renderNotes();
   }
 
+  static saveNote(newNote) {
+    const notes = Notes.getNotes();
+    notes.push(newNote);
+
+    Notes.saveNotes(notes);
+  }
+
   static getNotes() {
-    return JSON.parse(localStorage.getItem(NOTES_STORE)) || [];
+    const notes = JSON.parse(localStorage.getItem(NOTES_STORE));
+
+    return notes && notes.sort(note => note.pinned ? -1 : 1) || [];
   }
 
   static editNote(index) {
@@ -86,14 +93,9 @@ class Notes {
   static saveEditNote(index, note) {
     const notes = Notes.getNotes();
 
-    notes[index] = {
-      title: note.title,
-      content: note.content,
-      color: note.color
-    }
+    notes[index] = note;
 
-    localStorage.setItem(NOTES_STORE, JSON.stringify(notes));
-    renderNotes();
+    Notes.saveNotes(notes);
   }
 
   static removeNote(index) {
@@ -101,8 +103,7 @@ class Notes {
 
     notes.splice(index, 1);
 
-    localStorage.setItem(NOTES_STORE, JSON.stringify(notes));
-    renderNotes();
+    Notes.saveNotes(notes);
   }
 
   static setPinnedNote(index) {
@@ -110,8 +111,7 @@ class Notes {
 
     notes[index].pinned = true;
 
-    localStorage.setItem(NOTES_STORE, JSON.stringify(notes));
-    renderNotes();
+    Notes.saveNotes(notes);
   }
 }
 
@@ -120,12 +120,12 @@ function renderNotes() {
   const notes = Notes.getNotes();
 
   if (notes.length === 0) {
+    noteList.innerHTML = '';
     return noNotes.style.display = 'block';
   }
 
   noteList.innerHTML = '';
   notes
-    .sort(note => note.pinned ? -1 : 1)
     .forEach((note, index) => {
       const leftBox = document.createElement('div');
       const rightBox = document.createElement('div');
@@ -214,6 +214,7 @@ function editNote() {
   noteTitle.value = note.title;
   noteContent.value = note.content;
   noteColor.value = note.color;
+  currentNoteIsPinned = note.pinned;
 
   disableColorButton();
 
@@ -228,7 +229,8 @@ function saveEditNote() {
   const note = {
     title: noteTitle.value,
     content: noteContent.value,
-    color: noteColor.value
+    color: noteColor.value,
+    pinned: currentNoteIsPinned
   }
 
   Notes.saveEditNote(currentEditNoteIndex, note);
